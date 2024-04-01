@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>旅游推荐系统</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f9f4;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s;
+    }
+
+    .header {
+      background-color: #8fc1a9;
+      color: #FFF;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .content {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 40px;
+      background-color: #FFF;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .navbar {
+      background-color: #8fc1a9;
+      overflow: hidden;
+      font-size: 18px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .navbar a:hover {
+      background-color: #7cbf9e;
+      color: black;
+    }
+
+    .image-info-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    .image-info-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    img {
+      width: 30%;
+      margin-right: 20px;
+      border-radius: 4px 0 0 4px;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    img:hover {
+      opacity: 0.8;
+    }
+
+    .info {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 15px 0;
+      background-color: #8fc1a9;
+      color: #FFF;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    button:hover {
+      background-color: #7cbf9e;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .additional-content {
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fadeIn {
+      animation-name: fadeIn;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="./main.html">首页</a>
+    <a href="./recommend.html">猜你喜欢</a>
+  </div>
+  <div class="header fadeIn">
+    <h1>旅游推荐系统</h1>
+  </div>
+  <div class="content fadeIn">
+    <div class="dropdown">
+      <label for="location">景点地址:</label>
+      <select id="location">
+        <option value="chengdu">成都</option>
+        <option value="suzhou">苏州</option>
+        <option value="beijing">北京</option>
+        <option value="chongqing">重庆</option>
+        <option value="wuhan">武汉</option>
+        <option value="tianjin">天津</option>
+        <option value="taibei">台北</option>
+        <option value="xiamen">厦门</option>
+        <option value="lijiang">丽江</option>
+        <option value="xianggang">香港</option>
+        <option value="nanjing">南京</option>
+        <!-- 添加更多选项 -->
+      </select>
+    </div>
+    <button onclick="updateImages()">更新图片</button>
+    <div id="image-container"></div>
+
+    <div class="additional-content">
+      <h2>选择地区</h2>
+      <p>点击后可以获得对应地区的图片</p>
+    </div>
+  </div>
+    <div id="image-container"></div>
+    <script>
+      // Ensure that the DOM is fully loaded before accessing the elements
+      document.addEventListener('DOMContentLoaded', function() {
+        function updateImages() {
+          const location = document.getElementById('location').value;
+          // Check if the element with id 'type' exists
+          const typeElement = document.getElementById('type');
+          let type = '';
+          if (typeElement) {
+            type = typeElement.value;
+          }
+  
+          // Proceed with the fetch request
+          fetch('/update_images', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `location=${encodeURIComponent(location)}&type=${encodeURIComponent(type)}`
+          })
+          .then(response => response.json())
+          .then(data => {
+            const imageContainer = document.getElementById('image-container');
+            imageContainer.innerHTML = '';
+  
+            const images = data.images; // Assuming the response data structure
+            images.forEach(image => {
+              const imageInfoContainer = document.createElement('div');
+              imageInfoContainer.className = 'image-info-container';
+  
+              const imageElement = document.createElement('img');
+              imageElement.src = image.imagePath;
+              imageElement.alt = '景点图片';
+              imageElement.onclick = function() {
+                fetch('/save_click_image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                imagePath: image.imagePath,
+                name: image.name,
+                place: image.place,
+                evaluation: image.evaluation,
+                score: image.score,
+                link: image.link
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            window.location.href = image.link;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    };
+  
+              const infoElement = document.createElement('div');
+              infoElement.className = 'info';
+              infoElement.innerHTML = `
+                <h3>${image.name}</h3>
+                <p>地点: ${image.place}</p>
+                <p>用户评价: ${image.evaluation}</p>
+                <p>评分: ${image.score}</p>
+              `;
+  
+              imageInfoContainer.appendChild(imageElement);
+              imageInfoContainer.appendChild(infoElement);
+              imageContainer.appendChild(imageInfoContainer);
+            });
+          }).catch(error => {
+            console.error('Error:', error);
+          });
+        }
+  
+        // Bind the updateImages function to the button click
+        const updateButton = document.querySelector('button');
+        if (updateButton) {
+          updateButton.onclick = updateImages;
+        }
+      });
+    </script>
+  </div>
+<!-- 
+    <script>
+      function updateImages() {
+        const location = document.getElementById('location').value;
+        const type = document.getElementById('type').value;
+
+        fetch('/update_images', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `location=${encodeURIComponent(location)}&type=${encodeURIComponent(type)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          const imageContainer = document.getElementById('image-container');
+          imageContainer.innerHTML = '';
+
+          const imagePaths = data.image_paths;
+          imagePaths.forEach(imagePath => {
+            const imageElement = document.createElement('img');
+            imageElement.src = imagePath;
+            imageElement.alt = '景点图片';
+
+            imageContainer.appendChild(imageElement);
+          });
+        });
+      }
+    </script>
+  </div> -->
+</body>
+</html>

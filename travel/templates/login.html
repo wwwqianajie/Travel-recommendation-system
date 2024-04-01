@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>旅游推荐系统登录</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+    body {
+      background-color: #f4f9f4;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s;
+    }
+
+    .container {
+      width: 300px;
+      margin: 100px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      animation: fade-in 0.5s ease-in-out;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background-color: #8fc1a9;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #7cbf9e;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>旅游推荐系统</h1>
+    <form action="/login.html" method="POST">
+      <label for="username">用户名:</label>
+      <input type="text" id="username" name="username" required>
+      <label for="password">密码:</label>
+      <input type="password" id="password" name="password" required>
+      <button type="submit">登录</button>
+    </form>
+    <div class="footer">
+      &copy; 2024 旅游推荐系统. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
